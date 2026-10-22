@@ -70,6 +70,7 @@ hr { border: 0; border-top: 1px solid #e2e8f0; margin: 32px 0; }
     <h3 id="consultTitle">상담 신청</h3>
     <p class="sub">남겨주시면 확인 후 연락드리겠습니다.</p>
     <form id="consultForm">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
       <label for="cName">성함</label>
       <input id="cName" name="name" type="text" required autocomplete="name">
       <label for="cPhone">연락처</label>
@@ -165,9 +166,6 @@ hr { border: 0; border-top: 1px solid #e2e8f0; margin: 32px 0; }
 
 <script>
 (function () {
-  // 신청 내용을 받을 이메일 주소를 여기에 입력하세요.
-  var RECEIVER_EMAIL = '';
-
   var modal = document.getElementById('consultModal');
   var form = document.getElementById('consultForm');
   function open() { modal.classList.add('open'); document.getElementById('cName').focus(); }
@@ -178,14 +176,24 @@ hr { border: 0; border-top: 1px solid #e2e8f0; margin: 32px 0; }
   modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 
+  var sending = false;
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!RECEIVER_EMAIL) { alert('받는 이메일 주소(RECEIVER_EMAIL)가 아직 설정되지 않았습니다.'); return; }
+    if (sending) return;
     var d = new FormData(form);
-    var body = '성함: ' + d.get('name') + '\n연락처: ' + d.get('phone') + '\n지역: ' + d.get('region') + '\n\n상담 내용:\n' + d.get('content');
-    location.href = 'mailto:' + RECEIVER_EMAIL + '?subject=' + encodeURIComponent('[상담 신청] ' + d.get('name')) + '&body=' + encodeURIComponent(body);
-    form.reset();
-    close();
+    var btn = form.querySelector('.consult-submit');
+    sending = true; btn.disabled = true; btn.textContent = '전송 중...';
+    fetch('/api/consult', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: d.get('name'), phone: d.get('phone'), region: d.get('region'), content: d.get('content'), website: d.get('website') })
+    }).then(function (r) { return r.json().then(function (j) { return r.ok && j.ok; }); })
+      .catch(function () { return false; })
+      .then(function (ok) {
+        sending = false; btn.disabled = false; btn.textContent = '신청하기';
+        if (ok) { alert('상담 신청이 접수되었습니다. 확인 후 연락드리겠습니다.'); form.reset(); close(); }
+        else { alert('전송에 실패했습니다. 잠시 후 다시 시도해 주세요.'); }
+      });
   });
 })();
 </script>
