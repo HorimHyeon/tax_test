@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE, CATEGORIES } from '../data/site';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const latest = posts.slice(0, 6);
+const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'ko-KR', description: SITE.description };
+---
+<Base title={SITE.name} jsonLd={jsonLd}>
+  <main class="wrap">
+    <h1>{SITE.name}</h1>
+    <p>{SITE.description}</p>
+
+    <h2>카테고리</h2>
+    <div class="cat-grid">
+      {Object.entries(CATEGORIES).map(([k, c]) => (
+        <a href={`/blog/category/${k}/`}><strong>{c.label}</strong><span>{c.desc}</span></a>
+      ))}
+    </div>
+
+    <h2>최신 글</h2>
+    {latest.length ? <ul class="cards">{latest.map((p) => <PostCard post={p} />)}</ul> : <p>곧 새로운 글이 올라옵니다.</p>}
+    <p><a href="/blog/">전체 글 보기 →</a></p>
+
+    <div class="cta">
+      <strong>세무·경영 고민, 직접 상담받아 보세요</strong><br />
+      <button type="button" class="btn" data-consult-open>상담 신청하기</button>
+    </div>
+  </main>
+</Base>

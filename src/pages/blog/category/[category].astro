@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { CATEGORIES, CATEGORY_KEYS } from '../../../data/site';
+
+export function getStaticPaths() {
+  return CATEGORY_KEYS.map((category) => ({ params: { category } }));
+}
+const { category } = Astro.params as { category: keyof typeof CATEGORIES };
+const info = CATEGORIES[category];
+const posts = (await getCollection('blog', (p) => !p.data.draft && p.data.category === category)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title={`${info.label} 글 모음`} description={`${info.label} - ${info.desc}`} noindex={posts.length === 0}>
+  <main class="wrap">
+    <p class="meta"><a href="/blog/">전체 글</a> › {info.label}</p>
+    <h1>{info.label}</h1>
+    <p>{info.desc}</p>
+    {posts.length ? <ul class="cards">{posts.map((p) => <PostCard post={p} />)}</ul> : <p>아직 등록된 글이 없습니다.</p>}
+  </main>
+</Base>

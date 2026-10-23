@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import ConsultModal from '../components/ConsultModal.astro';
+import { SITE, CATEGORIES } from '../data/site';
+
+const {
+  title,
+  description = SITE.description,
+  image = SITE.defaultImage,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const fullTitle = title === SITE.name || type === 'article' ? title : `${title} | ${SITE.name}`;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const imageUrl = new URL(image, SITE.url).href;
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+  <meta name="theme-color" content="#1e3a8a" />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" href="data:," />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:locale" content={SITE.locale} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={imageUrl} />
+  <meta property="og:image:width" content="1080" />
+  <meta property="og:image:height" content="600" />
+  {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+  {tags.map((t: string) => <meta property="article:tag" content={t} />)}
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={imageUrl} />
+
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">{SITE.name}</a>
+      <nav class="nav" aria-label="카테고리">
+        <a href="/blog/">전체 글</a>
+        {Object.entries(CATEGORIES).map(([k, c]) => <a href={`/blog/category/${k}/`}>{c.label}</a>)}
+      </nav>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© {new Date().getFullYear()} {SITE.name}. 이 사이트의 글은 일반적인 정보 제공을 위한 것이며, 개별 상황에 대한 세무·법률 자문이 아닙니다.</p>
+    </div>
+  </footer>
+
+  <ConsultModal />
+</body>
+</html>

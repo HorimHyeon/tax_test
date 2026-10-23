@@ -1,0 +1,55 @@
+<button type="button" class="btn consult-btn" id="consultOpen">상담 신청하기</button>
+
+<div class="consult-modal" id="consultModal" role="dialog" aria-modal="true" aria-labelledby="consultTitle">
+  <div class="consult-box">
+    <button type="button" class="consult-close" id="consultClose" aria-label="닫기">&times;</button>
+    <h3 id="consultTitle">상담 신청</h3>
+    <p class="sub">남겨주시면 확인 후 연락드리겠습니다.</p>
+    <form id="consultForm">
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <label for="cName">성함</label>
+      <input id="cName" name="name" type="text" required autocomplete="name" />
+      <label for="cPhone">연락처</label>
+      <input id="cPhone" name="phone" type="tel" required inputmode="tel" placeholder="010-0000-0000" autocomplete="tel" />
+      <label for="cRegion">지역</label>
+      <input id="cRegion" name="region" type="text" required placeholder="예: 서울 강남구" />
+      <label for="cContent">상담 내용 (요약)</label>
+      <textarea id="cContent" name="content" required placeholder="궁금하신 내용을 간단히 적어주세요."></textarea>
+      <button type="submit" class="btn consult-submit">신청하기</button>
+      <p class="consult-note">입력하신 정보는 상담 안내 목적으로만 사용됩니다.</p>
+    </form>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  var modal = document.getElementById('consultModal');
+  var form = document.getElementById('consultForm');
+  function open() { modal.classList.add('open'); document.getElementById('cName').focus(); }
+  function close() { modal.classList.remove('open'); }
+  document.querySelectorAll('#consultOpen, [data-consult-open]').forEach(function (b) { b.addEventListener('click', open); });
+  document.getElementById('consultClose').addEventListener('click', close);
+  modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  var sending = false;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (sending) return;
+    var d = new FormData(form);
+    var btn = form.querySelector('.consult-submit');
+    sending = true; btn.disabled = true; btn.textContent = '전송 중...';
+    fetch('/api/consult', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: d.get('name'), phone: d.get('phone'), region: d.get('region'), content: d.get('content'), website: d.get('website') })
+    }).then(function (r) { return r.json().then(function (j) { return r.ok && j.ok; }); })
+      .catch(function () { return false; })
+      .then(function (ok) {
+        sending = false; btn.disabled = false; btn.textContent = '신청하기';
+        if (ok) { alert('상담 신청이 접수되었습니다. 확인 후 연락드리겠습니다.'); form.reset(); close(); }
+        else { alert('전송에 실패했습니다. 잠시 후 다시 시도해 주세요.'); }
+      });
+  });
+})();
+</script>

@@ -1,0 +1,16 @@
+---
+import { CATEGORIES } from '../data/site';
+const { post } = Astro.props;
+const d = post.data;
+const href = `/blog/${post.id}/`;
+const date = d.date.toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric' });
+---
+<li class="card">
+  {d.image && <a class="cover" href={href} tabindex="-1" aria-hidden="true"><img src={d.image} alt="" loading="lazy" /></a>}
+  <div class="body">
+    <a class="badge" href={`/blog/category/${d.category}/`}>{CATEGORIES[d.category].label}</a>
+    <h3><a href={href}>{d.title}</a></h3>
+    <p>{d.description}</p>
+    <p class="meta">{date}</p>
+  </div>
+</li>
