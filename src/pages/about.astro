@@ -1,14 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE, CATEGORIES } from '../data/site';
+import { SITE, SERVICES, CATEGORIES } from '../data/site';
 
 const jsonLd = { '@context': 'https://schema.org', '@type': 'AboutPage', name: `${SITE.name} 소개`, url: SITE.url + '/about/', inLanguage: 'ko-KR' };
 ---
-<Base title="회사 소개" description={`${SITE.name} - ${SITE.tagline}. ${SITE.about}`} jsonLd={jsonLd}>
+<Base title="회사 소개" description={`${SITE.name}(${SITE.nameEn}) - ${SITE.tagline}. ${SITE.about}`} jsonLd={jsonLd}>
   <main class="wrap">
     <p class="meta"><a href="/">홈</a> › 회사 소개</p>
     <h1>{SITE.name} 소개</h1>
-    <p class="meta">{SITE.tagline}</p>
+    <p class="meta">{SITE.nameEn} · {SITE.tagline}</p>
 
     <div class="prose">
       <h2>한눈에 보기</h2>
@@ -19,10 +19,15 @@ const jsonLd = { '@context': 'https://schema.org', '@type': 'AboutPage', name: `
         <li>음식점 등 자영업 직접 운영</li>
       </ul>
 
-      <h2>우리가 하는 일</h2>
-      <p>소상공인에게 필요한 세무, 경영, 자금 문제를 따로따로가 아니라 하나의 흐름으로 풀어 드리는 통합솔루션을 지향합니다.</p>
+      <h2>서비스</h2>
       <ul>
-        {Object.values(CATEGORIES).map((c) => <li><b>{c.label}</b> - {c.desc}</li>)}
+        {SERVICES.map((s) => <li><b>{s.label}</b> - {s.desc}</li>)}
+      </ul>
+
+      <h2>블로그에서 다루는 주제</h2>
+      <p>사장님들이 가장 자주 부딪히는 세무와 자금 문제를 블로그에서 쉽게 풀어 설명합니다.</p>
+      <ul>
+        {Object.entries(CATEGORIES).map(([k, c]) => <li><a href={`/blog/category/${k}/`}>{c.label}</a> - {c.desc}</li>)}
       </ul>
 
       <h2>일하는 방식</h2>

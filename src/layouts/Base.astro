@@ -27,7 +27,7 @@ const imageUrl = new URL(image, SITE.url).href;
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
-  <meta name="theme-color" content="#14213d" />
+  <meta name="theme-color" content="#1d4042" />
   <link rel="canonical" href={canonical} />
   <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <link rel="sitemap" href="/sitemap-index.xml" />
@@ -55,7 +55,7 @@ const imageUrl = new URL(image, SITE.url).href;
 <body>
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="/"><img src={SITE.logo} alt="" width="40" height="40" />{SITE.name}</a>
+      <a class="brand" href="/"><img src={SITE.logoMark} alt="" height="38" width="30" /><span>{SITE.name}</span></a>
       <nav class="nav" aria-label="주요 메뉴">
         <a href="/about/">회사소개</a>
         <a href="/blog/">블로그</a>
@@ -68,7 +68,7 @@ const imageUrl = new URL(image, SITE.url).href;
 
   <footer class="site-footer">
     <div class="container">
-      <div class="f-brand"><img src={SITE.logo} alt="" width="32" height="32" />{SITE.name}</div>
+      <div class="f-brand"><img src={SITE.logoMark} alt="" height="32" width="25" />{SITE.name}</div>
       <div>{SITE.tagline}</div>
       <p>
         <a href="/about/">회사소개</a><a href="/blog/">블로그</a>

@@ -1,15 +1,23 @@
 export const SITE = {
   name: '범솔루션',
-  tagline: '소상공인을 위한 세무·경영 통합솔루션',
+  nameEn: 'BEOM SOLUTION',
+  tagline: '경영컨설팅 | 마케팅 | AI개발',
   url: 'https://tax-test-ten.vercel.app',
   description:
-    '15년차 세무법인 사무장이자 직접 자영업을 운영하는 대표가 세무, 소상공인 컨설팅, 정책자금까지 사장님께 필요한 통합솔루션을 제공합니다.',
+    '15년차 세무법인 사무장이자 직접 자영업을 운영하는 대표가 소상공인에게 필요한 경영컨설팅, 마케팅, AI개발 통합솔루션을 제공합니다.',
   about:
     '15년차 세무법인 사무장이자, 소상공인을 위한 컨설팅 회사의 대표입니다. 음식점을 비롯한 자영업을 직접 운영하고 있어, 장부 위의 숫자뿐 아니라 매일 가게를 돌리는 사장님의 현실까지 이해하는 실무형 솔루션을 제공합니다.',
   defaultImage: '/og-image.png',
   logo: '/logo.svg',
+  logoMark: '/logo-mark.svg',
   locale: 'ko_KR',
 };
+
+export const SERVICES = [
+  { label: '경영컨설팅', desc: '세무·재무에 대한 이해를 바탕으로 매출과 비용 구조를 점검하고, 사업 운영 개선 방향을 함께 찾습니다.' },
+  { label: '마케팅', desc: '사업의 강점을 고객에게 효과적으로 알릴 수 있도록 온·오프라인 마케팅을 지원합니다.' },
+  { label: 'AI개발', desc: '업무 자동화 등 사업에 실제로 도움이 되는 AI 도구와 서비스 개발을 지원합니다.' },
+] as const;
 
 export const CATEGORIES = {
   vat: { label: '부가가치세', desc: '세금계산서, 매입세액공제, 부가세 신고 실무' },

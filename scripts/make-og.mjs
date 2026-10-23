@@ -1,29 +1,34 @@
-// 기본 공유 이미지(og-image.png, 1080x600)를 public/logo.svg 로 생성한다.
+// 기본 공유 이미지(og-image.png, 1080x600)를 public/logo-mark.svg 로 생성한다.
 // 사용법: node scripts/make-og.mjs
 import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
 
-const logo = readFileSync('public/logo.svg');
-const logoPng = await sharp(logo, { density: 300 }).resize(300, 300).png().toBuffer();
+const mark = readFileSync('public/logo-mark.svg');
+const markPng = await sharp(mark, { density: 300 }).resize({ height: 360 }).png().toBuffer();
 
+const font = 'Malgun Gothic, Noto Sans CJK KR, sans-serif';
 const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="600">
   <defs>
-    <radialGradient id="g" cx="85%" cy="0%" r="70%">
-      <stop offset="0" stop-color="#c9a227" stop-opacity="0.28"/>
-      <stop offset="1" stop-color="#c9a227" stop-opacity="0"/>
+    <radialGradient id="g" cx="85%" cy="0%" r="75%">
+      <stop offset="0" stop-color="#d4b45f" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#d4b45f" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="t" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6e9b9"/>
+      <stop offset="1" stop-color="#c9a24f"/>
+    </linearGradient>
   </defs>
-  <rect width="1080" height="600" fill="#14213d"/>
+  <rect width="1080" height="600" fill="#1d4042"/>
   <rect width="1080" height="600" fill="url(#g)"/>
-  <rect x="380" y="200" width="64" height="6" rx="3" fill="#c9a227"/>
-  <text x="380" y="310" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif" font-size="92" font-weight="800" fill="#ffffff">범솔루션</text>
-  <text x="380" y="372" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif" font-size="32" fill="#c9a227">소상공인을 위한 세무·경영 통합솔루션</text>
-  <text x="380" y="428" font-family="Malgun Gothic, Noto Sans CJK KR, sans-serif" font-size="24" fill="#c8ccd8">부가세 · 종합소득세 · 법인세 · 컨설팅 · 정책자금</text>
+  <text x="440" y="300" font-family="${font}" font-size="110" font-weight="800" fill="url(#t)">범솔루션</text>
+  <text x="444" y="350" font-family="Arial, sans-serif" font-size="26" letter-spacing="8" fill="#d4b45f">BEOM SOLUTION</text>
+  <rect x="444" y="380" width="520" height="2" fill="#d4b45f" opacity="0.6"/>
+  <text x="444" y="432" font-family="${font}" font-size="34" fill="#ffffff">경영컨설팅 | 마케팅 | AI개발</text>
 </svg>`;
 
 await sharp(Buffer.from(svg))
-  .composite([{ input: logoPng, left: 56, top: 150 }])
+  .composite([{ input: markPng, left: 70, top: 120 }])
   .png()
   .toFile('public/og-image.png');
 console.log('og-image.png created');
