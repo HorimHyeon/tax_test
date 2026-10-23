@@ -5,7 +5,7 @@ const TABLE_ID = 'tblPAQ0JkZbhJLAO0';
 
 const LIMITS = { name: 50, phone: 30, region: 60, content: 2000 };
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false, error: 'method_not_allowed' });
@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
     return res.status(502).json({ ok: false, error: 'airtable_failed' });
   }
   return res.status(200).json({ ok: true });
-};
+}
 
 function safeParse(s) {
   try { return JSON.parse(s); } catch (e) { return {}; }
