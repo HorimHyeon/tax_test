@@ -27,9 +27,9 @@ const imageUrl = new URL(image, SITE.url).href;
   <title>{fullTitle}</title>
   <meta name="description" content={description} />
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
-  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="theme-color" content="#14213d" />
   <link rel="canonical" href={canonical} />
-  <link rel="icon" href="data:," />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <link rel="sitemap" href="/sitemap-index.xml" />
 
   <meta property="og:type" content={type} />
@@ -54,10 +54,11 @@ const imageUrl = new URL(image, SITE.url).href;
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="/">{SITE.name}</a>
-      <nav class="nav" aria-label="카테고리">
-        <a href="/blog/">전체 글</a>
+    <div class="container">
+      <a class="brand" href="/"><img src={SITE.logo} alt="" width="40" height="40" />{SITE.name}</a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="/about/">회사소개</a>
+        <a href="/blog/">블로그</a>
         {Object.entries(CATEGORIES).map(([k, c]) => <a href={`/blog/category/${k}/`}>{c.label}</a>)}
       </nav>
     </div>
@@ -66,8 +67,14 @@ const imageUrl = new URL(image, SITE.url).href;
   <slot />
 
   <footer class="site-footer">
-    <div class="wrap">
-      <p>© {new Date().getFullYear()} {SITE.name}. 이 사이트의 글은 일반적인 정보 제공을 위한 것이며, 개별 상황에 대한 세무·법률 자문이 아닙니다.</p>
+    <div class="container">
+      <div class="f-brand"><img src={SITE.logo} alt="" width="32" height="32" />{SITE.name}</div>
+      <div>{SITE.tagline}</div>
+      <p>
+        <a href="/about/">회사소개</a><a href="/blog/">블로그</a>
+        {Object.entries(CATEGORIES).map(([k, c]) => <a href={`/blog/category/${k}/`}>{c.label}</a>)}
+      </p>
+      <small>© {new Date().getFullYear()} {SITE.name}. 이 사이트의 글은 일반적인 정보 제공을 위한 것이며, 개별 상황에 대한 세무·법률 자문이 아닙니다.</small>
     </div>
   </footer>
 

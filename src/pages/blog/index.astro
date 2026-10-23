@@ -7,7 +7,7 @@ import { CATEGORIES } from '../../data/site';
 const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 <Base title="블로그 전체 글" description="부가가치세, 종합소득세, 법인세, 소상공인컨설팅, 정책자금 관련 전체 글 목록입니다.">
-  <main class="wrap">
+  <main class="wrap wide">
     <h1>블로그 전체 글</h1>
     <p class="meta">
       {Object.entries(CATEGORIES).map(([k, c]) => <a class="badge" href={`/blog/category/${k}/`}>{c.label}</a>)}

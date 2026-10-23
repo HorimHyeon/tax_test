@@ -6,27 +6,85 @@ import { SITE, CATEGORIES } from '../data/site';
 
 const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const latest = posts.slice(0, 6);
-const jsonLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'ko-KR', description: SITE.description };
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'ko-KR', description: SITE.description },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url, logo: SITE.url + SITE.logo, description: SITE.about },
+];
 ---
-<Base title={SITE.name} jsonLd={jsonLd}>
-  <main class="wrap">
-    <h1>{SITE.name}</h1>
-    <p>{SITE.description}</p>
-
-    <h2>카테고리</h2>
-    <div class="cat-grid">
-      {Object.entries(CATEGORIES).map(([k, c]) => (
-        <a href={`/blog/category/${k}/`}><strong>{c.label}</strong><span>{c.desc}</span></a>
-      ))}
+<Base title={`${SITE.name} | ${SITE.tagline}`} description={SITE.description} jsonLd={jsonLd}>
+  <section class="hero">
+    <div class="container">
+      <div>
+        <p class="eyebrow">BUM SOLUTION</p>
+        <h1>사장님의 가게를 아는<br /><em>실무형 세무·경영 파트너</em></h1>
+        <p class="lead">15년차 세무법인 사무장이자 직접 자영업을 운영하는 대표가, 세무부터 컨설팅·정책자금까지 소상공인에게 필요한 통합솔루션을 제공합니다.</p>
+        <div class="actions">
+          <button type="button" class="btn lg" data-consult-open>무료 상담 신청</button>
+          <a class="btn ghost lg" href="/blog/">블로그 보기</a>
+        </div>
+      </div>
+      <div class="emblem"><img src={SITE.logo} alt="범솔루션 호랑이 로고" width="280" height="280" /></div>
     </div>
+  </section>
 
-    <h2>최신 글</h2>
-    {latest.length ? <ul class="cards">{latest.map((p) => <PostCard post={p} />)}</ul> : <p>곧 새로운 글이 올라옵니다.</p>}
-    <p><a href="/blog/">전체 글 보기 →</a></p>
+  <main>
+    <section class="section" id="about">
+      <div class="container about">
+        <div>
+          <div class="gold-bar"></div>
+          <h2 class="title">범솔루션 소개</h2>
+          <p class="sub">숫자와 현장, 두 가지를 모두 압니다.</p>
+          <p>{SITE.about}</p>
+          <p><a href="/about/">회사 소개 더 보기 →</a></p>
+        </div>
+        <ul class="facts">
+          <li><strong>15년차 세무법인 사무장</strong>세무 현장에서 쌓은 실무 경험</li>
+          <li><strong>소상공인 컨설팅 회사 대표</strong>경영 개선과 운영 고민까지 함께 해결</li>
+          <li><strong>현직 자영업 운영자</strong>음식점 등 직접 운영하며 체감하는 사장님의 현실</li>
+        </ul>
+      </div>
+    </section>
 
-    <div class="cta">
-      <strong>세무·경영 고민, 직접 상담받아 보세요</strong><br />
-      <button type="button" class="btn" data-consult-open>상담 신청하기</button>
-    </div>
+    <section class="section" id="services">
+      <div class="container">
+        <div class="gold-bar"></div>
+        <h2 class="title">주요 분야</h2>
+        <p class="sub">사장님께 필요한 세무·경영 정보를 분야별로 정리합니다.</p>
+        <div class="grid">
+          {Object.entries(CATEGORIES).map(([k, c]) => (
+            <a class="tile" href={`/blog/category/${k}/`}><strong>{c.label}</strong><span>{c.desc}</span></a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="strengths">
+      <div class="container">
+        <div class="gold-bar"></div>
+        <h2 class="title">범솔루션이 다른 이유</h2>
+        <p class="sub">이론이 아니라 가게에서 통하는 솔루션을 지향합니다.</p>
+        <div class="strengths">
+          <div class="strength"><b>현장을 아는 실무</b>직접 자영업을 운영하기 때문에 사장님이 실제로 겪는 고민에서 출발합니다.</div>
+          <div class="strength"><b>세무 전문 경험</b>15년간 세무법인에서 쌓은 신고·증빙·절세 실무 노하우를 담았습니다.</div>
+          <div class="strength"><b>원스톱 통합솔루션</b>세무, 경영 컨설팅, 정책자금까지 한 곳에서 연결해 드립니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="blog">
+      <div class="container">
+        <div class="gold-bar"></div>
+        <h2 class="title">최신 블로그 글</h2>
+        <p class="sub">바로 써먹을 수 있는 세무·경영 실무 정보를 매일 업데이트합니다.</p>
+        {latest.length ? <ul class="cards">{latest.map((p) => <PostCard post={p} />)}</ul> : <p>곧 새로운 글이 올라옵니다.</p>}
+        <p class="more"><a href="/blog/">전체 글 보기 →</a></p>
+
+        <div class="band">
+          <strong>세무·경영 고민, 혼자 끙끙 앓지 마세요</strong>
+          <p>상황을 남겨 주시면 확인 후 연락드리겠습니다.</p>
+          <button type="button" class="btn lg" data-consult-open>무료 상담 신청</button>
+        </div>
+      </div>
+    </section>
   </main>
 </Base>

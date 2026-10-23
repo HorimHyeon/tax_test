@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, CATEGORIES } from '../data/site';
+
+const jsonLd = { '@context': 'https://schema.org', '@type': 'AboutPage', name: `${SITE.name} 소개`, url: SITE.url + '/about/', inLanguage: 'ko-KR' };
+---
+<Base title="회사 소개" description={`${SITE.name} - ${SITE.tagline}. ${SITE.about}`} jsonLd={jsonLd}>
+  <main class="wrap">
+    <p class="meta"><a href="/">홈</a> › 회사 소개</p>
+    <h1>{SITE.name} 소개</h1>
+    <p class="meta">{SITE.tagline}</p>
+
+    <div class="prose">
+      <h2>한눈에 보기</h2>
+      <p>{SITE.about}</p>
+      <ul>
+        <li>15년차 세무법인 사무장</li>
+        <li>소상공인을 위한 컨설팅 회사 대표</li>
+        <li>음식점 등 자영업 직접 운영</li>
+      </ul>
+
+      <h2>우리가 하는 일</h2>
+      <p>소상공인에게 필요한 세무, 경영, 자금 문제를 따로따로가 아니라 하나의 흐름으로 풀어 드리는 통합솔루션을 지향합니다.</p>
+      <ul>
+        {Object.values(CATEGORIES).map((c) => <li><b>{c.label}</b> - {c.desc}</li>)}
+      </ul>
+
+      <h2>일하는 방식</h2>
+      <p>세법과 제도는 자주 바뀌고, 같은 질문도 사장님의 업종과 상황에 따라 답이 달라집니다. 그래서 일반론에서 끝내지 않고, 현장에서 실제로 적용되는 방법을 쉽게 풀어 설명하는 데 집중합니다.</p>
+    </div>
+
+    <div class="cta">
+      <strong>내 가게에 맞는 상담이 필요하신가요?</strong><br />
+      <button type="button" class="btn lg" data-consult-open>무료 상담 신청</button>
+    </div>
+  </main>
+</Base>

@@ -12,7 +12,7 @@ const info = CATEGORIES[category];
 const posts = (await getCollection('blog', (p) => !p.data.draft && p.data.category === category)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 <Base title={`${info.label} 글 모음`} description={`${info.label} - ${info.desc}`} noindex={posts.length === 0}>
-  <main class="wrap">
+  <main class="wrap wide">
     <p class="meta"><a href="/blog/">전체 글</a> › {info.label}</p>
     <h1>{info.label}</h1>
     <p>{info.desc}</p>
